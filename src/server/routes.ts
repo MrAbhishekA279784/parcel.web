@@ -405,7 +405,7 @@ export function createApiRouter(io: SocketIOServer) {
       }
 
       if (stock !== undefined) {
-        run('UPDATE inventory SET stock_quantity = ?, low_stock_threshold = ? WHERE product_id = ?", [
+        run('UPDATE inventory SET stock_quantity = ?, low_stock_threshold = ? WHERE product_id = ?', [
           Number(stock),
           Number(low_stock_threshold),
           id
