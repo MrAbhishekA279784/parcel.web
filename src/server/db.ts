@@ -74,8 +74,10 @@ export async function getDb(): Promise<Database> {
   return dbInstance;
 }
 
+let inTransaction = false;
+
 export function saveDb() {
-  if (!dbInstance) return;
+  if (!dbInstance || inTransaction) return;
   try {
     const data = dbInstance.export();
     fs.writeFileSync(DB_FILE, Buffer.from(data));
@@ -86,16 +88,19 @@ export function saveDb() {
 
 export function transaction<T>(fn: () => T): T {
   if (!dbInstance) throw new Error('Database not initialized');
+  inTransaction = true;
   dbInstance.run("BEGIN TRANSACTION");
   try {
     const result = fn();
     dbInstance.run("COMMIT");
+    inTransaction = false;
     saveDb();
     return result;
   } catch (err) {
     try {
       dbInstance.run("ROLLBACK");
     } catch {}
+    inTransaction = false;
     throw err;
   }
 }

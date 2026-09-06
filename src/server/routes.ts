@@ -795,9 +795,17 @@ export function createApiRouter(io: SocketIOServer) {
     const gst = Math.round(subtotal * 0.18 * 100) / 100;
     const total = subtotal + gst;
 
-    // 4. Generate IDs
-    const countRow = queryOne<{ cnt: number }>('SELECT COUNT(*) as cnt FROM orders');
-    const orderNumber = 10400 + (countRow?.cnt || 0) + 1;
+    // 4. Generate Unique IDs
+    const orderRows = query<{ id: string }>('SELECT id FROM orders');
+    let maxNum = 10400;
+    for (const row of orderRows) {
+      const match = row.id ? row.id.match(/ORD-(\d+)/) : null;
+      if (match) {
+        const n = parseInt(match[1], 10);
+        if (n > maxNum) maxNum = n;
+      }
+    }
+    const orderNumber = maxNum + 1;
     const orderId = `ORD-${orderNumber}`;
     const invoiceId = `INV-2026-${orderNumber}`;
     const now = new Date().toISOString().replace('T', ' ').substring(0, 19);
@@ -814,9 +822,10 @@ export function createApiRouter(io: SocketIOServer) {
         );
 
         for (const item of validatedItems) {
+          const oiId = `oi-${orderId}-${item.product.id}-${Date.now()}`;
           run(
             `INSERT INTO order_items (id, order_id, product_id, quantity, unit_price) VALUES (?, ?, ?, ?, ?)`,
-            [`oi-${orderId}-${item.product.id}`, orderId, item.product.id, item.quantity, item.unitPrice]
+            [oiId, orderId, item.product.id, item.quantity, item.unitPrice]
           );
 
           // Atomic inventory decrement preventing negative stock
