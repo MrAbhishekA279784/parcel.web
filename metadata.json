@@ -1,0 +1,6 @@
+{
+  "name": "ParcelFlow",
+  "description": "Smart e-commerce & warehouse automation platform connecting online ordering, inventory, billing, conveyor parcel movement, and simulated robotic sorting.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
