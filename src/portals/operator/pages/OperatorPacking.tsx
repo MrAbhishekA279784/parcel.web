@@ -189,6 +189,67 @@ export const OperatorPacking: React.FC<OperatorPackingProps> = ({
                 </Button>
               </div>
 
+              {/* Barcode Scanner Station (3 Items + Disposal) */}
+              <div className="p-4 rounded-xl bg-teal-950 text-white space-y-3 shadow-md">
+                <div className="flex items-center justify-between border-b border-teal-800 pb-2">
+                  <div className="flex items-center gap-2">
+                    <Barcode className="w-5 h-5 text-teal-400" />
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-teal-200">
+                      Packing Table Barcode Station (3 Items + Disposal)
+                    </h4>
+                  </div>
+                  <span className="text-[10px] font-mono bg-teal-900 text-teal-300 px-2 py-0.5 rounded">
+                    STATION 01 ACTIVE
+                  </span>
+                </div>
+                <p className="text-[11px] text-teal-200">
+                  Scan barcode for item verification or route to dustbin if defective/disposal required.
+                </p>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
+                  <button
+                    onClick={() => {
+                      showToast('Scanned: 12V SMPS Barcode Verified', 'success');
+                      if (activeItems.length > 0) handleToggleItemVerify(activeItems[0].id);
+                    }}
+                    className="p-2.5 rounded-lg bg-teal-900 hover:bg-teal-800 border border-teal-700 text-teal-100 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                  >
+                    <span>1. 12V SMPS</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      showToast('Scanned: GPS Module Barcode Verified', 'success');
+                      if (activeItems.length > 1) handleToggleItemVerify(activeItems[1].id);
+                      else if (activeItems.length > 0) handleToggleItemVerify(activeItems[0].id);
+                    }}
+                    className="p-2.5 rounded-lg bg-teal-900 hover:bg-teal-800 border border-teal-700 text-teal-100 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                  >
+                    <span>2. GPS Module</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      showToast('Scanned: ESP32 Barcode Verified', 'success');
+                      if (activeItems.length > 2) handleToggleItemVerify(activeItems[2].id);
+                      else if (activeItems.length > 0) handleToggleItemVerify(activeItems[0].id);
+                    }}
+                    className="p-2.5 rounded-lg bg-teal-900 hover:bg-teal-800 border border-teal-700 text-teal-100 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                  >
+                    <span>3. ESP 32</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      showToast('Disposal Alert: Item routed to Dustbin (Disposal Bin D)', 'warning');
+                    }}
+                    className="p-2.5 rounded-lg bg-red-950 hover:bg-red-900 border border-red-800 text-red-200 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                  >
+                    <span>Disposal / Dustbin</span>
+                  </button>
+                </div>
+              </div>
+
               {/* Item checklist */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">

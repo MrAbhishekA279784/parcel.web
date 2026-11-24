@@ -151,7 +151,7 @@ export const LoginPage: React.FC = () => {
 
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <label htmlFor="login-password" block text-xs font-medium text-zinc-300>
+                  <label htmlFor="login-password" className="block text-xs font-medium text-zinc-300">
                     Password
                   </label>
                   <button
@@ -277,7 +277,7 @@ export const LoginPage: React.FC = () => {
               </div>
 
               <div className="space-y-1.5">
-                <label htmlFor="signup-password" block text-xs font-medium text-zinc-300>
+                <label htmlFor="signup-password" className="block text-xs font-medium text-zinc-300">
                   Password
                 </label>
                 <div className="relative">

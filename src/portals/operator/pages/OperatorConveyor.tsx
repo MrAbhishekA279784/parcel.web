@@ -72,7 +72,7 @@ export const OperatorConveyor: React.FC<OperatorConveyorProps> = ({
       setTimeout(() => setFlashBin(null), 2500);
       fetchDestinations();
       fetchReadyOrders();
-      showToast(`Robotic Sorter assigned ${log.order_id} to ${log.assigned_bin} (${log.destination_city})`, 'success');
+      showToast(`Conveyor Camera Sorter assigned ${log.order_id} to ${log.assigned_bin} (${log.destination_city})`, 'success');
     };
 
     socket.on('robot:action', (data) => {
@@ -147,7 +147,7 @@ export const OperatorConveyor: React.FC<OperatorConveyorProps> = ({
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-zinc-200/80">
         <div>
           <h1 className="text-2xl font-bold text-zinc-900 tracking-tight flex items-center gap-3">
-            <span>Conveyor &amp; Robotic Arm Telemetry</span>
+            <span>Conveyor &amp; Camera Telemetry</span>
             <span className={`text-xs px-2.5 py-0.5 rounded font-mono font-bold ${
               isRunning ? 'bg-emerald-100 text-emerald-800' : isEmergency ? 'bg-red-100 text-red-800 animate-pulse' : 'bg-zinc-200 text-zinc-800'
             }`}>
@@ -155,7 +155,7 @@ export const OperatorConveyor: React.FC<OperatorConveyorProps> = ({
             </span>
           </h1>
           <p className="text-xs text-zinc-500 mt-1">
-            Bay 01 Automated Infeed &bull; Dual-Beam Infrared Scanner &bull; 4-DOF Robotic Servo Sorter
+            Bay 01 Automated Infeed &bull; Dual-Beam Infrared Scanner &bull; Optical Camera &amp; Conveyor Sorter
           </p>
         </div>
 

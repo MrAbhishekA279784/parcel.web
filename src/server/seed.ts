@@ -52,65 +52,20 @@ export async function seedDatabase(db: Database) {
   // 3. Destinations
   const destinations = [
     { id: 'dest-1', city: 'Pune', bin_label: 'BOX A' },
-    { id: 'dest-2', city: 'Delhi', bin_label: 'BOX B' },
-    { id: 'dest-3', city: 'Mumbai', bin_label: 'BOX C' },
-    { id: 'dest-4', city: 'Bengaluru', bin_label: 'BOX D' },
-    { id: 'dest-5', city: 'Other', bin_label: 'BOX E' }
+    { id: 'dest-2', city: 'Maharashtra', bin_label: 'BOX B' },
+    { id: 'dest-3', city: 'Delhi', bin_label: 'BOX C' },
+    { id: 'dest-4', city: 'Disposal (Dustbin)', bin_label: 'BOX D' }
   ];
 
   for (const d of destinations) {
     db.run("INSERT INTO destinations (id, city, bin_label) VALUES (?, ?, ?)", [d.id, d.city, d.bin_label]);
   }
 
-  // 4. Products (~40 realistic Indian-market items)
+  // 4. Products (3 items only as requested)
   const products = [
-    // Electronics
-    { id: 'prod-1', name: 'AeroSound Pro ANC Wireless Headphones', category_id: 'cat-electronics', price: 2999, discount_percent: 15, rating: 4.6, rating_count: 128, rack: 'Rack A-01', weight: 320, stock: 45, lowStock: 10, image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&q=80', desc: 'Hybrid active noise cancellation with 40-hour battery life and fast Type-C charging.' },
-    { id: 'prod-2', name: 'VoltCharge 20000mAh Power Bank 65W', category_id: 'cat-electronics', price: 1899, discount_percent: 10, rating: 4.4, rating_count: 94, rack: 'Rack A-02', weight: 410, stock: 38, lowStock: 10, image: 'https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=500&q=80', desc: 'Triple port fast charging power bank with digital power display and PD 3.0.' },
-    { id: 'prod-3', name: 'NovaSync Smart Fitness Watch with SpO2', category_id: 'cat-electronics', price: 2499, discount_percent: 20, rating: 4.5, rating_count: 210, rack: 'Rack A-03', weight: 110, stock: 4, lowStock: 10, image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&q=80', desc: '1.78 inch AMOLED always-on display with heart-rate, sleep tracking, and IP68 water resistance.' },
-    { id: 'prod-4', name: 'SonicBlast Portable Bluetooth 5.3 Speaker', category_id: 'cat-electronics', price: 1299, discount_percent: 0, rating: 4.2, rating_count: 82, rack: 'Rack A-04', weight: 480, stock: 25, lowStock: 10, image: 'https://images.unsplash.com/photo-1545454675-3531b543be5d?w=500&q=80', desc: '16W punchy stereo sound with passive bass radiators and rugged fabric exterior.' },
-    { id: 'prod-5', name: 'Precision Optical Ergonomic Mouse', category_id: 'cat-electronics', price: 699, discount_percent: 5, rating: 4.3, rating_count: 65, rack: 'Rack A-05', weight: 140, stock: 60, lowStock: 12, image: 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=500&q=80', desc: 'Dual mode 2.4G and Bluetooth ergonomic vertical wireless mouse.' },
-    { id: 'prod-6', name: 'UltraStream 4K HDMI Capture Card', category_id: 'cat-electronics', price: 1499, discount_percent: 12, rating: 4.1, rating_count: 38, rack: 'Rack A-06', weight: 90, stock: 18, lowStock: 8, image: 'https://images.unsplash.com/photo-1544652478-6653e09f18a2?w=500&q=80', desc: 'Plug and play video recording card for streaming, gaming, and conferencing.' },
-    { id: 'prod-7', name: 'TrueBass True Wireless Earbuds with ENC', category_id: 'cat-electronics', price: 1199, discount_percent: 25, rating: 4.5, rating_count: 310, rack: 'Rack A-07', weight: 85, stock: 52, lowStock: 15, image: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=500&q=80', desc: '13mm deep bass titanium drivers with quad mic environmental noise cancellation.' },
-
-    // Home & Kitchen
-    { id: 'prod-8', name: 'ThermaSteel Insulated Water Bottle 1000ml', category_id: 'cat-home', price: 649, discount_percent: 10, rating: 4.7, rating_count: 420, rack: 'Rack B-01', weight: 450, stock: 75, lowStock: 15, image: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=500&q=80', desc: 'Double walled vacuum insulation keeps water cold 24 hrs or piping hot 18 hrs.' },
-    { id: 'prod-9', name: 'BaristaTouch French Press Coffee Maker', category_id: 'cat-home', price: 899, discount_percent: 15, rating: 4.6, rating_count: 140, rack: 'Rack B-02', weight: 650, stock: 3, lowStock: 8, image: 'https://images.unsplash.com/photo-1517256064527-09c73fc73e38?w=500&q=80', desc: 'Heat-resistant borosilicate glass with 4-level stainless steel filtration.' },
-    { id: 'prod-10', name: 'ChefCraft 3-Piece Non-Stick Frying Pan Set', category_id: 'cat-home', price: 1799, discount_percent: 20, rating: 4.3, rating_count: 88, rack: 'Rack B-03', weight: 1800, stock: 22, lowStock: 6, image: 'https://images.unsplash.com/photo-1584990347449-3e3e29f37c3a?w=500&q=80', desc: 'Granite coated induction-compatible frying pans with stay-cool handles.' },
-    { id: 'prod-11', name: 'PureMist Ultrasonic Aroma Diffuser & Humidifier', category_id: 'cat-home', price: 1149, discount_percent: 5, rating: 4.4, rating_count: 73, rack: 'Rack B-04', weight: 390, stock: 28, lowStock: 10, image: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&q=80', desc: '500ml capacity with 7-color soothing LED mood light and auto shut-off.' },
-    { id: 'prod-12', name: 'AromaSpices 12-Jar Revolving Spice Rack', category_id: 'cat-home', price: 799, discount_percent: 0, rating: 4.1, rating_count: 52, rack: 'Rack B-05', weight: 1100, stock: 35, lowStock: 10, image: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=500&q=80', desc: '360-degree rotating spice organizer with food-grade airtight containers.' },
-    { id: 'prod-13', name: 'BambooComfort Memory Foam Orthopedic Pillow', category_id: 'cat-home', price: 1299, discount_percent: 18, rating: 4.6, rating_count: 165, rack: 'Rack B-06', weight: 950, stock: 40, lowStock: 12, image: 'https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=500&q=80', desc: 'Contoured neck support pillow with breathable washable bamboo fiber cover.' },
-
-    // Fashion
-    { id: 'prod-14', name: 'Classic Pure Cotton Oxford Slim Shirt', category_id: 'cat-fashion', price: 1199, discount_percent: 25, rating: 4.4, rating_count: 98, rack: 'Rack C-01', weight: 280, stock: 50, lowStock: 15, image: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=500&q=80', desc: 'Breathable 100% combed cotton formal and semi-formal button down shirt.' },
-    { id: 'prod-15', name: 'Everyday Stretch Chinos Trouser', category_id: 'cat-fashion', price: 1499, discount_percent: 20, rating: 4.2, rating_count: 76, rack: 'Rack C-02', weight: 420, stock: 32, lowStock: 10, image: 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=500&q=80', desc: 'Four-way flex fabric with stain repellent finish in versatile khaki tone.' },
-    { id: 'prod-16', name: 'AirStride Ultra Lightweight Running Shoes', category_id: 'cat-fashion', price: 2299, discount_percent: 15, rating: 4.5, rating_count: 230, rack: 'Rack C-03', weight: 680, stock: 19, lowStock: 8, image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&q=80', desc: 'High rebound EVA cushioning sole with breathable mesh engineered upper.' },
-    { id: 'prod-17', name: 'Vintage Genuine Leather Bifold Wallet', category_id: 'cat-fashion', price: 749, discount_percent: 0, rating: 4.7, rating_count: 180, rack: 'Rack C-04', weight: 110, stock: 2, lowStock: 10, image: 'https://images.unsplash.com/photo-1627123424574-724758594e93?w=500&q=80', desc: 'Full grain handcrafted leather wallet with RFID blocking protection.' },
-    { id: 'prod-18', name: 'Polarized Aviator Sunglasses UV400', category_id: 'cat-fashion', price: 899, discount_percent: 30, rating: 4.3, rating_count: 64, rack: 'Rack C-05', weight: 80, stock: 45, lowStock: 10, image: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=500&q=80', desc: 'Metal frame lightweight sunglasses with anti-glare scratch resistant lenses.' },
-    { id: 'prod-19', name: 'All-Weather Waterproof Commuter Backpack 25L', category_id: 'cat-fashion', price: 1699, discount_percent: 10, rating: 4.6, rating_count: 142, rack: 'Rack C-06', weight: 820, stock: 30, lowStock: 10, image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500&q=80', desc: 'Dedicated 15.6 inch padded laptop compartment with anti-theft hidden pocket.' },
-
-    // Books
-    { id: 'prod-20', name: 'System Design Interview – An Insider\'s Guide', category_id: 'cat-books', price: 999, discount_percent: 10, rating: 4.9, rating_count: 540, rack: 'Rack D-01', weight: 620, stock: 48, lowStock: 12, image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=500&q=80', desc: 'Comprehensive guide to scaling distributed systems, caching, and storage architecture.' },
-    { id: 'prod-21', name: 'Atomic Habits by James Clear', category_id: 'cat-books', price: 499, discount_percent: 20, rating: 4.8, rating_count: 890, rack: 'Rack D-02', weight: 350, stock: 65, lowStock: 15, image: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=500&q=80', desc: 'Proven framework for improving every day through compounding micro-behaviors.' },
-    { id: 'prod-22', name: 'The Psychology of Money by Morgan Housel', category_id: 'cat-books', price: 399, discount_percent: 15, rating: 4.7, rating_count: 620, rack: 'Rack D-03', weight: 290, stock: 55, lowStock: 15, image: 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=500&q=80', desc: 'Timeless lessons on wealth, greed, and happiness in 19 engaging short stories.' },
-    { id: 'prod-23', name: 'Designing Data-Intensive Applications', category_id: 'cat-books', price: 1499, discount_percent: 5, rating: 4.9, rating_count: 310, rack: 'Rack D-04', weight: 890, stock: 20, lowStock: 8, image: 'https://images.unsplash.com/photo-1532012164546-f432f2e3777a?w=500&q=80', desc: 'The definitive big ideas behind reliable, scalable, and maintainable systems.' },
-    { id: 'prod-24', name: 'Deep Work: Rules for Focused Success', category_id: 'cat-books', price: 449, discount_percent: 10, rating: 4.6, rating_count: 240, rack: 'Rack D-05', weight: 310, stock: 35, lowStock: 10, image: 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=500&q=80', desc: 'Transformative philosophy to achieve peak cognitive productivity without distraction.' },
-
-    // Fitness
-    { id: 'prod-25', name: 'ProGrip High Density Yoga Mat with Strap (6mm)', category_id: 'cat-fitness', price: 849, discount_percent: 15, rating: 4.5, rating_count: 175, rack: 'Rack E-01', weight: 1200, stock: 42, lowStock: 12, image: 'https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=500&q=80', desc: 'Eco-friendly non-slip TPE material with laser alignment guide lines.' },
-    { id: 'prod-26', name: 'PowerFlex Resistance Bands Set (5 Levels)', category_id: 'cat-fitness', price: 599, discount_percent: 25, rating: 4.3, rating_count: 110, rack: 'Rack E-02', weight: 450, stock: 58, lowStock: 15, image: 'https://images.unsplash.com/photo-1598289431512-b97b0917affc?w=500&q=80', desc: 'Natural latex loop bands with door anchor, handles, and waterproof travel pouch.' },
-    { id: 'prod-27', name: 'IronCore Hexagonal Rubber Dumbbells (Set of 2x5kg)', category_id: 'cat-fitness', price: 1899, discount_percent: 10, rating: 4.6, rating_count: 95, rack: 'Rack E-03', weight: 10000, stock: 15, lowStock: 5, image: 'https://images.unsplash.com/photo-1586401100295-7a8096fd231a?w=500&q=80', desc: 'Solid cast iron with anti-roll hexagonal rubber coated heads and knurled grip.' },
-    { id: 'prod-28', name: 'OptiShake Leakproof Protein Shaker 700ml', category_id: 'cat-fitness', price: 349, discount_percent: 0, rating: 4.4, rating_count: 220, rack: 'Rack E-04', weight: 190, stock: 80, lowStock: 20, image: 'https://images.unsplash.com/photo-1594882645126-14020914d58d?w=500&q=80', desc: 'BPA-free with stainless steel wire whisk ball and dual storage compartments.' },
-    { id: 'prod-29', name: 'SpeedRope Ball Bearing Skipping Rope', category_id: 'cat-fitness', price: 299, discount_percent: 10, rating: 4.2, rating_count: 85, rack: 'Rack E-05', weight: 160, stock: 65, lowStock: 15, image: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=500&q=80', desc: 'Tangle-free steel wire with 360-degree high speed swivel bearings.' },
-
-    // Accessories
-    { id: 'prod-30', name: 'Multi-Device Aluminum Laptop Stand Adjustable', category_id: 'cat-accessories', price: 1199, discount_percent: 20, rating: 4.7, rating_count: 280, rack: 'Rack F-01', weight: 750, stock: 38, lowStock: 10, image: 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=500&q=80', desc: 'Ergonomic 7-angle height adjustment with silicone non-scratch pads.' },
-    { id: 'prod-31', name: 'MagSafe Compatible Wireless Charging Stand 3-in-1', category_id: 'cat-accessories', price: 2199, discount_percent: 15, rating: 4.5, rating_count: 130, rack: 'Rack F-02', weight: 340, stock: 26, lowStock: 8, image: 'https://images.unsplash.com/photo-1586816879360-004f5b0c51e3?w=500&q=80', desc: 'Fast charge phone, smartwatch, and earbuds simultaneously with LED indicator.' },
-    { id: 'prod-32', name: 'Braided 100W USB-C to USB-C Cable (2m)', category_id: 'cat-accessories', price: 399, discount_percent: 0, rating: 4.6, rating_count: 310, rack: 'Rack F-03', weight: 60, stock: 90, lowStock: 25, image: 'https://images.unsplash.com/photo-1585338107529-13afc5f02586?w=500&q=80', desc: 'E-marker chip supported fast power delivery with military grade nylon jacket.' },
-    { id: 'prod-33', name: 'DeskMat XL Waterproof Felt & Leather Desk Pad', category_id: 'cat-accessories', price: 699, discount_percent: 10, rating: 4.4, rating_count: 92, rack: 'Rack F-04', weight: 450, stock: 50, lowStock: 12, image: 'https://images.unsplash.com/photo-1616628188859-7a11abb6fcc9?w=500&q=80', desc: '900x400mm dual sided non-slip desk protector with smooth mouse glide.' },
-    { id: 'prod-34', name: 'ScreenBright USB Monitor Light Bar with Auto Dim', category_id: 'cat-accessories', price: 1799, discount_percent: 12, rating: 4.8, rating_count: 145, rack: 'Rack F-05', weight: 520, stock: 20, lowStock: 6, image: 'https://images.unsplash.com/photo-1507499739999-097706ad8914?w=500&q=80', desc: 'Zero screen glare asymmetrical optical design with touch stepless dimming.' },
-    { id: 'prod-35', name: 'Acoustic Soundproofing Desk Privacy Shield', category_id: 'cat-accessories', price: 1249, discount_percent: 5, rating: 4.1, rating_count: 32, rack: 'Rack F-06', weight: 890, stock: 15, lowStock: 5, image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=500&q=80', desc: 'Eco-felt foldable sound absorbing panel for distraction-free workspace.' },
-    { id: 'prod-36', name: 'Smart Key Organizer with Multi-Tool Clip', category_id: 'cat-accessories', price: 499, discount_percent: 15, rating: 4.3, rating_count: 88, rack: 'Rack F-07', weight: 75, stock: 45, lowStock: 10, image: 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=500&q=80', desc: 'Aerospace aluminum compact key holder holds up to 10 keys silently.' }
+    { id: 'prod-smps', name: '12V SMPS', category_id: 'cat-electronics', price: 799, discount_percent: 10, rating: 4.8, rating_count: 45, rack: 'Rack A-01', weight: 350, stock: 50, lowStock: 10, image: 'https://images.unsplash.com/photo-1544652478-6653e09f18a2?w=500&q=80', desc: '12V regulated industrial switched-mode power supply with short circuit and overload protection.' },
+    { id: 'prod-gps', name: 'GPS module', category_id: 'cat-electronics', price: 599, discount_percent: 5, rating: 4.7, rating_count: 38, rack: 'Rack A-02', weight: 25, stock: 40, lowStock: 10, image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=500&q=80', desc: 'High precision NEO-6M GPS satellite navigation module with ceramic antenna and EEPROM.' },
+    { id: 'prod-esp32', name: 'ESP 32', category_id: 'cat-electronics', price: 499, discount_percent: 15, rating: 4.9, rating_count: 92, rack: 'Rack A-03', weight: 15, stock: 60, lowStock: 10, image: 'https://images.unsplash.com/photo-1603732551681-2e91483b1b59?w=500&q=80', desc: 'Dual-core ESP32 NodeMCU development board with ultra-low power co-processor, Wi-Fi, and Bluetooth BLE.' }
   ];
 
   for (const p of products) {
@@ -124,11 +79,9 @@ export async function seedDatabase(db: Database) {
 
   // 5. Seed Reviews
   const reviews = [
-    { id: 'rev-1', product_id: 'prod-1', customer_id: 'usr-cust-2', customer_name: 'Priya Deshmukh', rating: 5, comment: 'Exceptional sound quality and ANC blocks out all Pune traffic noise!' },
-    { id: 'rev-2', product_id: 'prod-1', customer_id: 'usr-cust-3', customer_name: 'Rohan Mehta', rating: 4, comment: 'Very comfortable cushions for long 6-hour work shifts. Fast delivery.' },
-    { id: 'rev-3', product_id: 'prod-8', customer_id: 'usr-customer-1', customer_name: 'Rahul Sharma', rating: 5, comment: 'Truly keeps water chilled even in 40 degree heat. Solid build.' },
-    { id: 'rev-4', product_id: 'prod-20', customer_id: 'usr-cust-5', customer_name: 'Amit Verma', rating: 5, comment: 'Must-read for every backend engineer preparing for tech interviews.' },
-    { id: 'rev-5', product_id: 'prod-30', customer_id: 'usr-cust-7', customer_name: 'Arjun Nair', rating: 5, comment: 'Heavy duty metal construction, my 16 inch MacBook Pro fits stably.' }
+    { id: 'rev-1', product_id: 'prod-smps', customer_id: 'usr-cust-2', customer_name: 'Priya Deshmukh', rating: 5, comment: 'Very stable 12V output for industrial automation setup!' },
+    { id: 'rev-2', product_id: 'prod-gps', customer_id: 'usr-cust-3', customer_name: 'Rohan Mehta', rating: 5, comment: 'Locks onto satellites quickly outdoors. Great GPS module.' },
+    { id: 'rev-3', product_id: 'prod-esp32', customer_id: 'usr-customer-1', customer_name: 'Rahul Sharma', rating: 5, comment: 'ESP32 Wi-Fi and Bluetooth connectivity works flawlessly for IoT projects.' }
   ];
 
   for (const r of reviews) {
@@ -164,12 +117,12 @@ export async function seedDatabase(db: Database) {
 
   // Specific active orders for demo clarity
   const predefinedOrders = [
-    { id: 'ORD-10241', cust: 'usr-customer-1', city: 'Pune', status: 'ON_CONVEYOR', pay: 'PAID', method: 'UPI', prodId: 'prod-1', qty: 1, daysAgo: 0, bin: 'BOX A' },
-    { id: 'ORD-10242', cust: 'usr-customer-1', city: 'Mumbai', status: 'PACKED', pay: 'PAID', method: 'CARD', prodId: 'prod-8', qty: 2, daysAgo: 0, bin: null },
-    { id: 'ORD-10243', cust: 'usr-cust-2', city: 'Delhi', status: 'PICKING', pay: 'PAID', method: 'UPI', prodId: 'prod-20', qty: 1, daysAgo: 0, bin: null },
-    { id: 'ORD-10244', cust: 'usr-cust-3', city: 'Bengaluru', status: 'CONFIRMED', pay: 'PAID', method: 'COD', prodId: 'prod-30', qty: 1, daysAgo: 0, bin: null },
-    { id: 'ORD-10245', cust: 'usr-customer-1', city: 'Pune', status: 'DELIVERED', pay: 'PAID', method: 'UPI', prodId: 'prod-21', qty: 1, daysAgo: 4, bin: 'BOX A' },
-    { id: 'ORD-10246', cust: 'usr-customer-1', city: 'Pune', status: 'DELIVERED', pay: 'PAID', method: 'CARD', prodId: 'prod-32', qty: 2, daysAgo: 12, bin: 'BOX A' }
+    { id: 'ORD-10241', cust: 'usr-customer-1', city: 'Pune', status: 'ON_CONVEYOR', pay: 'PAID', method: 'UPI', prodId: 'prod-esp32', qty: 1, daysAgo: 0, bin: 'BOX A' },
+    { id: 'ORD-10242', cust: 'usr-customer-1', city: 'Mumbai', status: 'PACKED', pay: 'PAID', method: 'CARD', prodId: 'prod-smps', qty: 2, daysAgo: 0, bin: null },
+    { id: 'ORD-10243', cust: 'usr-cust-2', city: 'Delhi', status: 'PICKING', pay: 'PAID', method: 'UPI', prodId: 'prod-gps', qty: 1, daysAgo: 0, bin: null },
+    { id: 'ORD-10244', cust: 'usr-cust-3', city: 'Bengaluru', status: 'CONFIRMED', pay: 'PAID', method: 'COD', prodId: 'prod-esp32', qty: 1, daysAgo: 0, bin: null },
+    { id: 'ORD-10245', cust: 'usr-customer-1', city: 'Pune', status: 'DELIVERED', pay: 'PAID', method: 'UPI', prodId: 'prod-smps', qty: 1, daysAgo: 4, bin: 'BOX A' },
+    { id: 'ORD-10246', cust: 'usr-customer-1', city: 'Pune', status: 'DELIVERED', pay: 'PAID', method: 'CARD', prodId: 'prod-gps', qty: 2, daysAgo: 12, bin: 'BOX A' }
   ];
 
   let orderCount = 10100;

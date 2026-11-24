@@ -117,6 +117,122 @@ export const CustomerTracking: React.FC<CustomerTrackingProps> = ({
           </div>
         </div>
 
+        {/* Real-time Tracking Stage Badge Banner */}
+        {(() => {
+          const isDelivered = order.status === 'DELIVERED';
+          const isInTransit = order.status === 'DISPATCHED';
+          return (
+            <div className={`p-4 rounded-xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 ${
+              isDelivered ? 'bg-emerald-50 border-emerald-200 text-emerald-900' :
+              isInTransit ? 'bg-blue-50 border-blue-200 text-blue-900' :
+              'bg-orange-50 border-orange-200 text-orange-900'
+            }`}>
+              <div className="flex items-center gap-3">
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-white shrink-0 ${
+                  isDelivered ? 'bg-emerald-600' : isInTransit ? 'bg-blue-600' : 'bg-orange-600'
+                }`}>
+                  {isDelivered ? <CheckCircle2 className="w-5 h-5" /> : isInTransit ? <Truck className="w-5 h-5" /> : <Cpu className="w-5 h-5" />}
+                </div>
+                <div>
+                  <span className="text-[10px] font-bold uppercase tracking-wider opacity-75">Live Item Tracking Status</span>
+                  <h4 className="text-sm font-bold">
+                    {isDelivered ? 'Order Delivered Successfully' : isInTransit ? 'Order In Transit (Out for Delivery)' : 'Warehouse Processing & Conveyor Sorting'}
+                  </h4>
+                  <p className="text-xs opacity-90 mt-0.5">
+                    {isDelivered ? 'Your items have been safely delivered to your destination address.' :
+                     isInTransit ? 'Your package has been dispatched and is traveling via logistics carrier.' :
+                     'Your items (12V SMPS, GPS module, or ESP 32) are currently being processed, picked, or sorted on the warehouse conveyor.'}
+                  </p>
+                </div>
+              </div>
+              <span className={`px-3 py-1.5 rounded-lg text-xs font-bold font-mono tracking-wider shrink-0 bg-white shadow-xs ${
+                isDelivered ? 'text-emerald-700 border border-emerald-300' :
+                isInTransit ? 'text-blue-700 border border-blue-300' :
+                'text-orange-700 border border-orange-300'
+              }`}>
+                {isDelivered ? 'DELIVERED' : isInTransit ? 'IN TRANSIT' : 'PROCESSING'}
+              </span>
+            </div>
+          );
+        })()}
+
+        {/* Color-Coded Progress Bar with Status-Specific Icons for Processing, Transit, and Delivered States */}
+        {(() => {
+          const isDelivered = order.status === 'DELIVERED';
+          const isInTransit = order.status === 'DISPATCHED';
+          const isProcessing = !isDelivered && !isInTransit;
+
+          const progressPercent = isDelivered ? 100 : isInTransit ? 66 : 33;
+          const progressColor = isDelivered ? 'bg-emerald-600' : isInTransit ? 'bg-blue-600' : 'bg-orange-600';
+
+          return (
+            <div className="p-5 rounded-2xl bg-zinc-50 border border-zinc-200/85 space-y-4 shadow-2xs">
+              <div className="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-zinc-600">
+                <span>Fulfillment State Roadmap</span>
+                <span className="font-mono text-zinc-500">{progressPercent}% Completed</span>
+              </div>
+
+              {/* Progress bar container */}
+              <div className="relative w-full h-3 bg-zinc-200 rounded-full overflow-hidden">
+                <div
+                  className={`absolute top-0 left-0 h-full transition-all duration-500 rounded-full ${progressColor}`}
+                  style={{ width: `${progressPercent}%` }}
+                />
+              </div>
+
+              {/* 3 State Icons & Labels */}
+              <div className="grid grid-cols-3 gap-3 pt-2">
+                {/* Processing State */}
+                <div className={`flex flex-col items-center text-center p-3.5 rounded-xl border transition-all ${
+                  isProcessing
+                    ? 'bg-orange-50 border-orange-300 text-orange-900 shadow-xs'
+                    : 'bg-white border-zinc-200 text-zinc-500'
+                }`}>
+                  <div className={`w-9 h-9 rounded-full flex items-center justify-center text-white mb-1.5 ${
+                    isProcessing ? 'bg-orange-600 animate-pulse' : 'bg-emerald-600'
+                  }`}>
+                    {isProcessing ? <Cpu className="w-4 h-4" /> : <CheckCircle2 className="w-4 h-4" />}
+                  </div>
+                  <span className="text-xs font-bold">1. Processing</span>
+                  <span className="text-[10px] text-zinc-400 mt-0.5">Picking, packing &amp; sorting</span>
+                </div>
+
+                {/* Transit State */}
+                <div className={`flex flex-col items-center text-center p-3.5 rounded-xl border transition-all ${
+                  isInTransit
+                    ? 'bg-blue-50 border-blue-300 text-blue-900 shadow-xs'
+                    : isDelivered
+                    ? 'bg-white border-zinc-200 text-zinc-700'
+                    : 'bg-white border-zinc-200 text-zinc-400 opacity-60'
+                }`}>
+                  <div className={`w-9 h-9 rounded-full flex items-center justify-center text-white mb-1.5 ${
+                    isInTransit ? 'bg-blue-600 animate-pulse' : isDelivered ? 'bg-emerald-600' : 'bg-zinc-300'
+                  }`}>
+                    {isDelivered ? <CheckCircle2 className="w-4 h-4" /> : <Truck className="w-4 h-4" />}
+                  </div>
+                  <span className="text-xs font-bold">2. In Transit</span>
+                  <span className="text-[10px] text-zinc-400 mt-0.5">Dispatched to carrier</span>
+                </div>
+
+                {/* Delivered State */}
+                <div className={`flex flex-col items-center text-center p-3.5 rounded-xl border transition-all ${
+                  isDelivered
+                    ? 'bg-emerald-50 border-emerald-300 text-emerald-900 shadow-xs'
+                    : 'bg-white border-zinc-200 text-zinc-400 opacity-60'
+                }`}>
+                  <div className={`w-9 h-9 rounded-full flex items-center justify-center text-white mb-1.5 ${
+                    isDelivered ? 'bg-emerald-600 animate-bounce' : 'bg-zinc-300'
+                  }`}>
+                    <CheckCircle2 className="w-4 h-4" />
+                  </div>
+                  <span className="text-xs font-bold">3. Delivered</span>
+                  <span className="text-[10px] text-zinc-400 mt-0.5">Safely handed over</span>
+                </div>
+              </div>
+            </div>
+          );
+        })()}
+
         {/* Live Conveyor / Hardware Active Alert Banner */}
         {isConveyorActive && (
           <div className="p-4 rounded-xl bg-blue-50/80 border border-blue-200 text-blue-900 flex items-center justify-between gap-4 animate-pulse">

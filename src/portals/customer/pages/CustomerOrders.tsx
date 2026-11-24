@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Order } from '../../../types';
+import { Order, OrderStatusHistory } from '../../../types';
 import { apiFetch } from '../../../shared/lib/api';
 import { formatINR, formatDateTime } from '../../../shared/lib/formatters';
 import { StatusPill } from '../../../shared/components/StatusPill';
@@ -24,6 +24,24 @@ export const CustomerOrders: React.FC<CustomerOrdersProps> = ({
   const [orders, setOrders] = useState<Order[]>([]);
   const [activeTab, setActiveTab] = useState<string>('all');
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [expandedOrderId, setExpandedOrderId] = useState<string | null>(null);
+  const [orderHistories, setOrderHistories] = useState<Record<string, OrderStatusHistory[]>>({});
+
+  const toggleExpandOrder = async (orderId: string) => {
+    if (expandedOrderId === orderId) {
+      setExpandedOrderId(null);
+      return;
+    }
+    setExpandedOrderId(orderId);
+    if (!orderHistories[orderId]) {
+      try {
+        const data = await apiFetch<{ history: OrderStatusHistory[] }>(`/orders/${orderId}`);
+        setOrderHistories(prev => ({ ...prev, [orderId]: data.history || [] }));
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  };
 
   const fetchOrders = () => {
     setIsLoading(true);
@@ -68,8 +86,11 @@ export const CustomerOrders: React.FC<CustomerOrdersProps> = ({
 
   const filteredOrders = orders.filter(order => {
     if (activeTab === 'all') return true;
-    if (activeTab === 'in_progress') {
-      return ['PLACED', 'CONFIRMED', 'PICKING', 'PICKED', 'PACKING', 'PACKED', 'ON_CONVEYOR', 'DETECTED', 'SORTING', 'SORTED', 'DISPATCHED'].includes(order.status);
+    if (activeTab === 'processing') {
+      return ['PLACED', 'CONFIRMED', 'PICKING', 'PICKED', 'PACKING', 'PACKED', 'ON_CONVEYOR', 'DETECTED', 'SORTING', 'SORTED'].includes(order.status);
+    }
+    if (activeTab === 'transit') {
+      return order.status === 'DISPATCHED';
     }
     if (activeTab === 'delivered') return order.status === 'DELIVERED';
     if (activeTab === 'cancelled') return order.status === 'CANCELLED';
@@ -80,9 +101,14 @@ export const CustomerOrders: React.FC<CustomerOrdersProps> = ({
   const tabs = [
     { id: 'all', label: 'All Orders', count: orders.length },
     {
-      id: 'in_progress',
-      label: 'In Progress',
-      count: orders.filter(o => ['PLACED', 'CONFIRMED', 'PICKING', 'PICKED', 'PACKING', 'PACKED', 'ON_CONVEYOR', 'DETECTED', 'SORTING', 'SORTED', 'DISPATCHED'].includes(o.status)).length
+      id: 'processing',
+      label: 'Processing',
+      count: orders.filter(o => ['PLACED', 'CONFIRMED', 'PICKING', 'PICKED', 'PACKING', 'PACKED', 'ON_CONVEYOR', 'DETECTED', 'SORTING', 'SORTED'].includes(o.status)).length
+    },
+    {
+      id: 'transit',
+      label: 'In Transit',
+      count: orders.filter(o => o.status === 'DISPATCHED').length
     },
     { id: 'delivered', label: 'Delivered', count: orders.filter(o => o.status === 'DELIVERED').length },
     { id: 'cancelled', label: 'Cancelled', count: orders.filter(o => o.status === 'CANCELLED').length },
@@ -212,7 +238,15 @@ export const CustomerOrders: React.FC<CustomerOrdersProps> = ({
                     )}
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      className="h-8 text-xs"
+                      onClick={() => toggleExpandOrder(order.id)}
+                    >
+                      {expandedOrderId === order.id ? 'Hide Milestones' : 'Milestone Timestamps'}
+                    </Button>
                     <Button
                       variant="secondary"
                       size="sm"
@@ -233,6 +267,44 @@ export const CustomerOrders: React.FC<CustomerOrdersProps> = ({
                     </Button>
                   </div>
                 </div>
+
+                {/* Expanded Milestone Timestamps Section */}
+                {expandedOrderId === order.id && (
+                  <div className="pt-4 border-t border-zinc-100 bg-zinc-50/80 -mx-5 -mb-5 p-5 rounded-b-2xl space-y-3">
+                    <h5 className="text-xs font-bold uppercase tracking-wider text-zinc-600">
+                      Tracking Milestones &amp; Timestamps
+                    </h5>
+                    <div className="space-y-2">
+                      {(() => {
+                        const hist = orderHistories[order.id] || [];
+                        const stages = [
+                          { key: 'PLACED', label: 'Order Placed' },
+                          { key: 'CONFIRMED', label: 'Payment Confirmed' },
+                          { key: 'PICKED', label: 'Items Picked' },
+                          { key: 'PACKED', label: 'Packed & Barcoded' },
+                          { key: 'SORTED', label: 'Automated Sorting' },
+                          { key: 'DISPATCHED', label: 'Dispatched' },
+                          { key: 'DELIVERED', label: 'Delivered' }
+                        ];
+
+                        return stages.map(st => {
+                          const match = hist.find(h => h.status === st.key);
+                          return (
+                            <div key={st.key} className="flex items-center justify-between text-xs bg-white p-2.5 rounded-lg border border-zinc-200/60 shadow-2xs">
+                              <div className="flex items-center gap-2">
+                                <span className={`w-2 h-2 rounded-full ${match ? 'bg-emerald-600' : 'bg-zinc-300'}`} />
+                                <span className={`font-semibold ${match ? 'text-zinc-900' : 'text-zinc-400'}`}>{st.label}</span>
+                              </div>
+                              <span className="font-mono text-zinc-500">
+                                {match ? formatDateTime(match.changed_at) : 'Pending'}
+                              </span>
+                            </div>
+                          );
+                        });
+                      })()}
+                    </div>
+                  </div>
+                )}
               </div>
             );
           })}
